@@ -24,14 +24,15 @@ const Squrl = () => {
                     text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
                     id="url" type="url" placeholder="https://mysecretwebsite.com/private" />
                 </div>
-                <label className="Squrl__output block text-gray-300 text-sm font-bold mb-2" htmlFor="output">
+                <label className="block text-gray-300 text-sm font-bold mb-2" htmlFor="output">
                     Shortened URL
                 </label>
-                <input className="bg-gray-400 dark:bg-gray-800 shadow appearance-none border rounded w-full py-3 px-3 
+                <input className="Squrl__ouput bg-gray-400 dark:bg-gray-800 shadow appearance-none border rounded w-full py-3 px-3 
                     text-gray-100 leading-tight" 
                     id="output" type="url" placeholder="encrypted URL" readOnly="readOnly" value="https://squrl.dev/Xf43D"/>
                 <p className="text-gray-300 text-sm italic mt-2">* Make sure to include <span className="font-bold">https://</span> within your URL for enhanced security.</p>
             </form>
+            {/* TODO: Validate URL onClick. Currently bypassing. Also check for blank or null. */}
             <button className="bg-teal-300 hover:bg-teal-500 text-gray-900 font-semibold
             py-2 px-4 border border-teal-200 rounded shadow" onClick={parseUrl}> Encrypt & Shorten URL 🔐</button>
         </div>
