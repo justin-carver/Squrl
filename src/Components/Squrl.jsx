@@ -17,14 +17,14 @@ const Squrl = () => {
             </p>
             <form className="Squrl__url-form bg-white dark:bg-gray-600 shadow-md rounded px-8 pt-6 pb-8 mb-4">
                 <div className="mb-4">
-                    <label className="block text-gray-300 text-sm font-bold mb-2" for="url">
+                    <label className="block text-gray-300 text-sm font-bold mb-2" htmlFor="url">
                         URL for encryption
                     </label>
                     <input className="shadow appearance-none border rounded w-full py-3 px-3 
                     text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
                     id="url" type="url" placeholder="https://mysecretwebsite.com/private" />
                 </div>
-                <label className="Squrl__output block text-gray-300 text-sm font-bold mb-2" for="output">
+                <label className="Squrl__output block text-gray-300 text-sm font-bold mb-2" htmlFor="output">
                     Shortened URL
                 </label>
                 <input className="bg-gray-400 dark:bg-gray-800 shadow appearance-none border rounded w-full py-3 px-3 
@@ -33,7 +33,7 @@ const Squrl = () => {
                 <p className="text-gray-300 text-sm italic mt-2">* Make sure to include <span className="font-bold">https://</span> within your URL for enhanced security.</p>
             </form>
             <button className="bg-teal-300 hover:bg-teal-500 text-gray-900 font-semibold
-            py-2 px-4 border border-teal-200 rounded shadow" onClick={parseUrl}> Encrypt URL 🔐</button>
+            py-2 px-4 border border-teal-200 rounded shadow" onClick={parseUrl}> Encrypt & Shorten URL 🔐</button>
         </div>
     );
 }

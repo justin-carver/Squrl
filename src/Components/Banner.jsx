@@ -1,11 +1,21 @@
+// TODO: Fix issue with banner breaking width when on mobile.
+import { useEffect, useState} from "react";
+
 const Banner = () => {
+
+    const [bannerVisbility, setBannerVisibility] = new useState(localStorage.getItem('banner-visiblity') || "");
 
     const hideBanner = () => {
         document.querySelector('.Banner').classList.add('hidden');
+        setBannerVisibility('hidden');
     }
 
+    useEffect(() => {
+        localStorage.setItem("banner-visiblity", bannerVisbility);
+    }, [bannerVisbility]);
+
     return (
-    <div className="Banner bg-indigo-700 fixed w-full">
+    <div className={"Banner bg-indigo-700 fixed w-full z-10 " + bannerVisbility}>
         <div className="max-w-2xl mx-auto py-2 px-3 sm:px-6 lg:px-8">
             <div className="flex items-center flex-wrap">
                 <div className="w-0 flex-1 flex items-center">
