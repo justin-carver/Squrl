@@ -1,7 +1,7 @@
-import Squrl from './Components/Squrl';
-import Wrapper from './Components/Wrapper';
-import Banner from './Components/Banner';
-import Footer from './Components/Footer';
+import Squrl from './components/Squrl';
+import Wrapper from './components/Wrapper';
+import Banner from './components/Banner';
+import Footer from './components/Footer';
 
 function App() {
   return (

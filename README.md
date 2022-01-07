@@ -1,14 +1,18 @@
 # Squrl
+
 Squrl, Secure Quick URL, is a URL shortening service that offers secure end-to-end encryption.
 
 ## Stack
-This is currently running a solid *MERN* stack, utilizing: 
-- **MongoDB**: Client-side File Level Encryption & Redirect Collection
+
+This is currently running a solid *MERN* stack, utilizing:
+
+- **MongoDB w/ Mongoose**: Client-side File Level Encryption & Redirect Collection
 - **Express**: Router and API Endpoint
 - **React**: Front-End w/ TailwindCSS
 - **Node**: Back-End
 
 ## End-to-End Encryption 🔐
+
 In today's modern age, encryption and privacy must be a golden standard when working with any set of data leaving your network. Current large-scale popular URL shorteners (bit.ly, tinyurl) are a bane to this essential need by allowing third-party companies to gather massive amounts of analytics by using a simple link.
 
 With Squrl, to start, the current node server should be configured in the following setup:
@@ -26,4 +30,12 @@ At this point, secure communications can occur to and from the server. The serve
 ### Database Security
 
 - [ ] [Client-side Field Level Encryption](https://docs.mongodb.com/manual/core/security-client-side-encryption/) for MongoDB should be configured with appropriate settings for either deterministic or randomized generation.
+- [ ] Configure MongoDB to setup Squrl CSFLE Schema
+
+## Great Reads
+
+These are some nice articles of information accommodating the reasoning for this project:
+
+- [Guess what? URL shorteners short-circuit cloud security (Article)](https://arstechnica.com/information-technology/2016/04/guess-what-url-shorteners-short-circuit-cloud-security/)
+- [Gone in Six Characters: Short URLs Considered Harmful for Cloud services (Research Paper)](https://arxiv.org/pdf/1604.02734v1.pdf)
 
