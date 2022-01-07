@@ -5,7 +5,6 @@ const conf = require('./conf/server.conf');
 
 const connectDb = (beginListen) => {
     mongoose.connect(conf.dbURI, { useNewUrlParser: true, useUnifiedTopology: true }).then(e => {
-        console.log('Succssful connection!', e);
         beginListen();
     }).catch(e => {
         console.log('Error attempting to connect to db: ', e);

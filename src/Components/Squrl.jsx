@@ -1,12 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faKey } from "@fortawesome/free-solid-svg-icons";
+import parseUrl from '../server/dbinteract';
 
 const Squrl = () => {
-
-    const parseUrl = () => {
-        console.log(`Parsing information for: ${document.querySelector('#url').value}`);
-    }
-
     return(
         <div className="Squrl flex flex-col">
             <p className="text-black dark:text-white font text-4xl lowercase font-logo tracking-wide">Squrl <FontAwesomeIcon icon={faKey} /></p>
@@ -22,7 +18,7 @@ const Squrl = () => {
                     </label>
                     <input className="shadow appearance-none border rounded w-full py-3 px-3 
                     text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                    id="url" type="url" placeholder="https://mysecretwebsite.com/private" />
+                    id="url" type="url" placeholder="https://mysecretwebsite.com/private"/>
                 </div>
                 <label className="block text-gray-300 text-sm font-bold mb-2" htmlFor="output">
                     Shortened URL

@@ -1,5 +1,6 @@
 # Prod Server Conf
 /src/server/conf
+/src/server/logs
 
 # Logs
 logs
