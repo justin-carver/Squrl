@@ -2,6 +2,7 @@
 
 const express = require('express');
 const morgan = require('morgan');
+const helmet = require('helmet');
 const driver = require('./driver');
 const rfs = require('rotating-file-stream');
 const path = require('path');
@@ -14,7 +15,7 @@ const app = express();
 // Apply the rate limiting middleware to URL generation calls only
 app.use('/generate-url', conf.apiLimiter);
 
-// TODO: Implement Helmet.
+app.use(helmet());
 app.use(express.static(path.join(__dirname, '../../build/')));
 app.use(bodyParser.json({ extended: true }));
 
@@ -36,7 +37,9 @@ app.post('/generate-url', (req, res) => {
         ipAddress : req.socket.remoteAddress
     }).save().then(dbentry => {
         console.log('Database Entry: ', dbentry, ' saved!');
-    }).catch(res.sendStatus(400));
+    }).catch(e => {
+        console.log('POST Error:', e);
+    });
     res.sendStatus(200);
 });
 
