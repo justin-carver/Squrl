@@ -29,7 +29,7 @@ At this point, secure communications can occur to and from the server. The serve
 
 ### Database Security
 
-- [ ] [Client-side Field Level Encryption](https://docs.mongodb.com/manual/core/security-client-side-encryption/) for MongoDB *can* be configured (if applicable) with appropriate settings for either deterministic or randomized encryption.
+- [ ] [Client-side Field Level Encryption](https://docs.mongodb.com/manual/core/security-client-side-encryption/) for MongoDB *can* be configured (if applicable) with appropriate settings for either deterministic or randomized encryption. This requires access to MongoDB Enterprise.
 
 ## Great Reads
 
@@ -37,5 +37,5 @@ These are some nice articles of information accommodating the reasoning for this
 
 - [Guess what? URL shorteners short-circuit cloud security (Article)](https://arstechnica.com/information-technology/2016/04/guess-what-url-shorteners-short-circuit-cloud-security/)
 - [Gone in Six Characters: Short URLs Considered Harmful for Cloud services (Research Paper)](https://arxiv.org/pdf/1604.02734v1.pdf)
-- [Encryption / Decryption of Data (Article)](https://rhamedy.medium.com/encryption-decryption-of-data-based-on-users-password-using-pbkdf2-aes-algorithms-592f8c1bb79a)
+- [Encryption / Decryption of Data  using PBKDF2 & AES (Article)](https://rhamedy.medium.com/encryption-decryption-of-data-based-on-users-password-using-pbkdf2-aes-algorithms-592f8c1bb79a)
 

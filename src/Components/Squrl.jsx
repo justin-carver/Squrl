@@ -1,8 +1,14 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faKey } from "@fortawesome/free-solid-svg-icons";
+import clientKms from '../clientkms';
 import parseUrl from '../server/dbinteract';
 
 const Squrl = () => {
+
+    let temp = clientKms.encryptUrl('https://google.com', 'thisIsAKey');
+    clientKms.decryptUrl(temp, 'thisIsAKey');
+    
+
     return(
         <div className="Squrl flex flex-col">
             <p className="text-black dark:text-white font text-4xl lowercase font-logo tracking-wide">Squrl <FontAwesomeIcon icon={faKey} /></p>
@@ -11,7 +17,7 @@ const Squrl = () => {
                     Secure Quick URL</a>, is a modern URL shortener with end-to-end encryption for a more secure transfer of information.<br/>
                     There are multiple points of encryption along the route.
             </p>
-            <form className="Squrl__url-form bg-white dark:bg-gray-600 shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <form className="Squrl__url-form bg-white dark:bg-gray-600 shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={parseUrl}>
                 <div className="mb-4">
                     <label className="block text-gray-300 text-sm font-bold mb-2" htmlFor="url">
                         URL for encryption
@@ -19,6 +25,7 @@ const Squrl = () => {
                     <input className="shadow appearance-none border rounded w-full py-3 px-3 
                     text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
                     id="url" type="url" placeholder="https://mysecretwebsite.com/private"/>
+                    <p className="Squrl__url-form--error text-red-500 text-sm italic mt-2"></p>
                 </div>
                 <label className="block text-gray-300 text-sm font-bold mb-2" htmlFor="output">
                     Shortened URL
