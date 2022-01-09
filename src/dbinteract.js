@@ -2,7 +2,7 @@ const cryptoJs = require('crypto-js');
 const validUrl = require('valid-url');
 const { Entropy, charset64 } = require('entropy-string');
 
-const requestOptions = {
+const generateRequestOptions = {
     method: 'POST',
     headers: {
     'Content-Type': 'application/json',
@@ -10,20 +10,28 @@ const requestOptions = {
     }
 };
 
+const decryptUrlOptions = {
+    method: 'POST',
+    headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    }
+}
+
 const parseUrl = async (sessionKey) => {
     if (document.querySelector('#url').value !== "" && validUrl.isWebUri(document.querySelector('#url').value)) {
-        document.querySelector('.Squrl__url-form--error').innerHTML = "";
-        requestOptions.body = JSON.stringify({
+        document.querySelector('#squrl-error').innerHTML = "";
+        generateRequestOptions.body = JSON.stringify({
             encryptedUrl : encryptUrl(document.querySelector('#url').value, sessionKey).toString()
         });
         // Make post request to update db and store encrypted url
-        await fetch('/generate-url/', requestOptions).then((res) => res.json()).then(json => {
+        await fetch('/generate-url/', generateRequestOptions).then((res) => res.json()).then(json => {
             document.querySelector('#output').value = `https://squrl.dev/${json.urlRoute}`;
         }).catch(e => {
             console.log('Failed to retrieve information from url: ', e);
         });
     } else {
-        document.querySelector('.Squrl__url-form--error').innerHTML = "Please enter a valid URL.";
+        document.querySelector('#squrl-error').innerHTML = "Please enter a valid URL.";
     }
 }
 
@@ -70,4 +78,24 @@ const decryptUrl = (url, pass) => {
     return decrypted;
 }
 
-export { parseUrl, generateSessionKey, decryptUrl, encryptUrl };
+const getDecryptedUrlFromDb = async () => {
+    let decryptedUrl = document.querySelector('#decrypted-url');
+    let squrlUrl = document.querySelector('#encrypted-url');
+    let key = document.querySelector('#key');
+
+    if (key.value !== "") {
+        decryptUrlOptions.body = JSON.stringify({
+            urlRoute : squrlUrl.value,
+            sessionKey : key.value
+        });
+        await fetch('/decrypt-url', decryptUrlOptions).then((res) => res.json()).then(json => {
+            decryptedUrl.value = decryptUrl(json.encryptedUrl, key.value).toString(cryptoJs.enc.Utf8);
+        }).catch(e => {
+            console.log('Failed to retrieve information from url: ', e);
+        });
+    } else {
+        document.querySelector('#decrypter-error').innerHTML = "Please enter a valid Session Key or Encrypted URL.";
+    }
+}
+
+export { getDecryptedUrlFromDb, parseUrl, generateSessionKey, decryptUrl, encryptUrl };

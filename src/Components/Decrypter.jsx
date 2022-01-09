@@ -1,7 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faKey, faArrowDown } from "@fortawesome/free-solid-svg-icons";
-import { decryptUrl } from '../dbinteract';
-import cryptoJs from 'crypto-js';
+import { getDecryptedUrlFromDb } from '../dbinteract';
 
 const Decrypter = () => {
 
@@ -9,8 +8,9 @@ const Decrypter = () => {
         e.preventDefault();
         let encryptedUrl = document.querySelector('#encrypted-url').value;
         let key = document.querySelector('#key').value;
+        console.log('DECRYPTER:', encryptedUrl, key);
         if (key.value !== undefined || key.value !== '') {
-            document.querySelector('#decrypted-url').value = decryptUrl(encryptedUrl, key).toString(cryptoJs.enc.Utf8);
+            getDecryptedUrlFromDb(encryptedUrl, key);
         }
     }
 
@@ -35,7 +35,7 @@ const Decrypter = () => {
                     <input className="Decrypter__decrypted-url-form--key shadow appearance-none border rounded w-full py-3 px-3 
                     text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
                     id="key" type="text" placeholder="e.g. 9f64a576"/>
-                    <p className="Decrypter__decrypted-url-form--error text-red-500 text-sm italic mt-2"></p>
+                    <p className="Decrypter__decrypted-url-form--error text-red-500 text-sm italic mt-2" id="#decrypter-error"></p>
 
                     <div className="flex justify-evenly mt-6 mb-6 text-white">
                         <FontAwesomeIcon icon={faArrowDown}/>

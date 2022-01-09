@@ -26,12 +26,12 @@ const Squrl = () => {
                     <input className="shadow appearance-none border rounded w-full py-3 px-3 
                     text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
                     id="url" type="url" placeholder="https://mysecretwebsite.com/private"/>
-                    <p className="Squrl__url-form--error text-red-500 text-sm italic mt-2"></p>
+                    <p className="Squrl__url-form--error text-red-500 text-sm italic mt-2" id="squrl-error"></p>
                 </div>
                 <label className="block text-gray-300 text-sm font-bold mb-2" htmlFor="output">
                     Shortened URL
                 </label>
-                <input className="Squrl__ouput placeholder:text-gray-500 bg-gray-400 dark:bg-gray-800 shadow appearance-none border rounded w-full py-3 px-3 
+                <input className="Squrl__output placeholder:text-gray-500 bg-gray-400 dark:bg-gray-800 shadow appearance-none border rounded w-full py-3 px-3 
                     text-gray-100 leading-tight" 
                     id="output" type="url" placeholder="https://squrl.dev/Xf43D" readOnly="readOnly"/>
                 <p className="text-gray-300 text-sm italic mt-2">* Make sure to include <span className="font-bold">https://</span> within your URL for enhanced security.</p>

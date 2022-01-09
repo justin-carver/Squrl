@@ -59,10 +59,23 @@ app.get('/:urlRoute', (req, res) => {
     }
 });
 
+app.post('/decrypt-url', (req, res) => {
+    Url.findOne({ urlRoute : req.body.urlRoute, sessionKey : req.body.sessionKey }, (err, doc) => {
+        if (!doc) {
+            res.sendStatus(404)
+        } else {
+            res.setHeader('content-type', 'application/json');
+            res.json({
+                encryptedUrl : doc.encryptedUrl
+            });
+        }
+    })
+});
+
 // ! Append sessionKey to generate-url to prevent outside post requests.
 app.post('/generate-url', (req, res) => {
     const generatedRoute = new Entropy({ total: 1e3, risk: 1e9, charset: charset64 }).string();
-    console.log(generatedRoute);
+    // TODO: Rewrite this to use Url.findOne();
     Url.find({
         urlRoute : generatedRoute,
     }, (err, docs) => {

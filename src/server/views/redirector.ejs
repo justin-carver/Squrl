@@ -8,7 +8,6 @@
 </head>
 <body>
     <script>
-        const params = new URLSearchParams(window.location.href);
         const decryptUrl = (url, pass) => {
             let salt = CryptoJS.enc.Hex.parse(url.substr(0, 32));
             let iv = CryptoJS.enc.Hex.parse(url.substr(32, 32));
