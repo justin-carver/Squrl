@@ -8,7 +8,6 @@ const Decrypter = () => {
         e.preventDefault();
         let encryptedUrl = document.querySelector('#encrypted-url').value;
         let key = document.querySelector('#key').value;
-        console.log('DECRYPTER:', encryptedUrl, key);
         if (key.value !== undefined || key.value !== '') {
             getDecryptedUrlFromDb(encryptedUrl, key);
         }

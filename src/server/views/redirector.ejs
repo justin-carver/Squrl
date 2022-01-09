@@ -3,11 +3,11 @@
 <head>
 <meta charset=utf-8>
 <title>Squrl Redirector</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/pbkdf2.js"></script>
+<script nonce="<%=nonce%>" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+<script nonce="<%=nonce%>" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/pbkdf2.js"></script>
 </head>
 <body>
-    <script>
+    <script nonce="<%=nonce%>">
         const decryptUrl = (url, pass) => {
             let salt = CryptoJS.enc.Hex.parse(url.substr(0, 32));
             let iv = CryptoJS.enc.Hex.parse(url.substr(32, 32));
@@ -15,7 +15,7 @@
             
             var key = CryptoJS.PBKDF2(pass, salt, {
                 keySize: 256 / 32,
-                iterations: 100
+                iterations: 1000
             });
     
             let decrypted = CryptoJS.AES.decrypt(encrypted, key, { 
@@ -25,7 +25,14 @@
             })
             return decrypted;
         }
-        window.location.assign(decryptUrl("<%=url%>", "<%=key%>").toString(CryptoJS.enc.Utf8));
+        const decryptedUrl = decryptUrl("<%=url%>", "<%=key%>").toString(CryptoJS.enc.Utf8);
+        if (decryptedUrl) {
+            try {
+                window.location.assign(decryptedUrl);
+            } catch (e) {
+                window.location.assign('localhost:3000');
+            }
+        }
     </script>
 </body>
 </html>

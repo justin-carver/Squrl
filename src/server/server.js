@@ -32,30 +32,37 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../../build/', 'index.html'));
 })
 
-// Re-direction GET request
 app.get('/:urlRoute', (req, res) => {
     const urlRoute = req.params.urlRoute;
-    if (urlRoute.includes('+')) {
-        // Check if the session key has been applied in the param;
-        let sessionKey = urlRoute.substring(urlRoute.indexOf('+') + 1, urlRoute.length);
+    const sessionKey = urlRoute.substring(urlRoute.indexOf('+') + 1, urlRoute.length);
+    if (urlRoute.includes('+') && urlRoute.length === 21) {
+        if ((urlRoute.match(/\+/g)||[]).length > 1) return;
         if (sessionKey.length) {
-            // There appears to be a session key attached. Verifying...
+            // There appears to be a session key attached. Verifying if this url is in the database?
             Url.findOne({ urlRoute : urlRoute.substring(0, urlRoute.indexOf('+')) }, (err, doc) => {
-                if (!doc) {
-                    res.sendStatus(404);
-                } else {
-                    res.setHeader("Content-Security-Policy", "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com");
+                if (!doc) { res.sendStatus(404) } //  There are no documents associated with this urlRoute.
+                else {
+                    // urlRoute does exist, serve redirector with appropriate headers.
+                    console.log(doc);
+                    const nonce = new Entropy({ total: 1e6, risk: 1e9, charset: charset64 }).string();
+                    res.setHeader("Content-Security-Policy", `object-src 'none'; script-src 'nonce-${nonce}' 'unsafe-inline' 'unsafe-eval' 'strict-dynamic' https: http:; base-uri 'none'`);
                     res.render('redirector', {
                         url : doc.encryptedUrl,
-                        key : sessionKey
+                        key : sessionKey,
+                        nonce : nonce
                     });
-                    console.log(`Redirecting user for client-side decryption... god speed ${req.body.remoteAddress}`);
+                    // Client will worry about decrypting.
+                    console.log(`Redirecting user for client-side decryption... god speed ${req.socket.remoteAddress}! o7`);
                 }
-            })
+            }).catch(e => {
+                console.log('Exception:', e);
+            });
         } else {
             // There is no session key appended, but prompt for password screen!
             // Component may need to be created.
         }
+    } else {
+        res.sendStatus(406);
     }
 });
 
@@ -72,25 +79,27 @@ app.post('/decrypt-url', (req, res) => {
     })
 });
 
-// ! Append sessionKey to generate-url to prevent outside post requests.
 app.post('/generate-url', (req, res) => {
-    const generatedRoute = new Entropy({ total: 1e3, risk: 1e9, charset: charset64 }).string();
-    // TODO: Rewrite this to use Url.findOne();
-    Url.find({
+    const generatedRoute = new Entropy({ total: 1e4, risk: 1e9, charset: charset64 }).string();
+    Url.findOne({
         urlRoute : generatedRoute,
-    }, (err, docs) => {
-        if (!docs.length) {
+    }, (err, doc) => {
+        if (!doc) {
             // Route does not exist! Can create!
             generateUrlDocument(req, res, generatedRoute);
             res.setHeader('content-type', 'application/json');
             res.json({
                 urlRoute : generatedRoute
             });
-            // res.send();
         } else {
-            console.log('Did find a doc!: ', docs);
+            res.sendStatus(409).send('URL route was taken... odds of this happening are very slim.');
         }
     });
+});
+
+//The 404 Route (ALWAYS Keep this as the last route)
+app.get('*', (req, res) => {
+    res.status(404).send('So secure, we can\'t even find it...');
 });
 
 const generateUrlDocument = (req, res, generatedRoute) => {

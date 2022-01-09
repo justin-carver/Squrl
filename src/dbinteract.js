@@ -37,7 +37,7 @@ const parseUrl = async (sessionKey) => {
 
 // RFC 4648 compatible (URL friendly!)
 const generateSessionKey = () => {
-    const entropy = new Entropy({ total: 1e6, risk: 1e9, charset: charset64 });
+    const entropy = new Entropy({ total: 1e4, risk: 1e9, charset: charset64 });
     return entropy.string();
 }
 
@@ -47,7 +47,7 @@ const encryptUrl = (encData, pass) => {
 
     var key = cryptoJs.PBKDF2(pass, salt, {
         keySize: 256/32,
-        iterations: 100
+        iterations: 1000
     });
     
     let encrypted = cryptoJs.AES.encrypt(encData, key, { 
@@ -67,7 +67,7 @@ const decryptUrl = (url, pass) => {
     
     var key = cryptoJs.PBKDF2(pass, salt, {
         keySize: 256 / 32,
-        iterations: 100
+        iterations: 1000
     });
 
     let decrypted = cryptoJs.AES.decrypt(encrypted, key, { 
