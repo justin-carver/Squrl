@@ -1,6 +1,6 @@
 const cryptoJs = require('crypto-js');
 const validUrl = require('valid-url');
-const { Entropy } = require('entropy-string');
+const { Entropy, charset64 } = require('entropy-string');
 
 const requestOptions = {
     method: 'POST',
@@ -17,8 +17,8 @@ const parseUrl = async (sessionKey) => {
             encryptedUrl : encryptUrl(document.querySelector('#url').value, sessionKey).toString()
         });
         // Make post request to update db and store encrypted url
-        await fetch('/generate-url/', requestOptions).then(() => {
-            // Do stuff on completion.
+        await fetch('/generate-url/', requestOptions).then((res) => res.json()).then(json => {
+            document.querySelector('#output').value = `https://squrl.dev/${json.urlRoute}`;
         }).catch(e => {
             console.log('Failed to retrieve information from url: ', e);
         });
@@ -27,8 +27,9 @@ const parseUrl = async (sessionKey) => {
     }
 }
 
+// RFC 4648 compatible (URL friendly!)
 const generateSessionKey = () => {
-    const entropy = new Entropy({ total: 1e6, risk: 1e9, charset: '0123456789abcdef' });
+    const entropy = new Entropy({ total: 1e6, risk: 1e9, charset: charset64 });
     return entropy.string();
 }
 
@@ -46,9 +47,7 @@ const encryptUrl = (encData, pass) => {
         padding: cryptoJs.pad.Pkcs7,
         mode: cryptoJs.mode.CBC  
     });
-    
-    // salt, iv will be hex 32 in length
-    // append them to the ciphertext for use in decryption
+
     let url = salt.toString() + iv.toString() + encrypted.toString();
     return url;
 }
@@ -70,17 +69,5 @@ const decryptUrl = (url, pass) => {
     })
     return decrypted;
 }
-
-// const decryptUrl = (encData, key) => {
-//     let decryptedValue = cryptoJs.AES.decrypt(encData, key).toString(cryptoJs.enc.Utf8);
-//     console.log('Decrypted: ', decryptedValue.toString(cryptoJs.enc.Utf8));
-//     return decryptedValue;
-// }
-
-// const encryptUrl = (url, key) => {
-//     let encrypted = cryptoJs.AES.encrypt(url, key);
-//     console.log('Encrypted: ', encrypted.toString());
-//     return encrypted;
-// }
 
 export { parseUrl, generateSessionKey, decryptUrl, encryptUrl };
