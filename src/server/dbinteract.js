@@ -11,13 +11,13 @@ const requestOptions = {
     }
 };
 
-const parseUrl = async () => {
-    // query selectors need to be in exported function
+const parseUrl = async (sessionKey) => {
     if (document.querySelector('#url').value !== "" && validUrl.isWebUri(document.querySelector('#url').value)) {
         document.querySelector('.Squrl__url-form--error').innerHTML = "";
         requestOptions.body = JSON.stringify({
-            encryptedUrl : encryptUrl(document.querySelector('#url').value, 'thisIsASalt').toString()
+            encryptedUrl : encryptUrl(document.querySelector('#url').value, sessionKey).toString()
         });
+        // Make post request to update db and store encrypted url
         await fetch('/generate-url/', requestOptions).then(() => {
             // Do stuff on completion.
         }).catch(e => {
@@ -30,17 +30,13 @@ const parseUrl = async () => {
 
 const generateSessionKey = () => {
     const entropy = new Entropy({ total: 1e6, risk: 1e9, charset: '0123456789abcdef' });
-    return new Promise((resolve, reject) => {
-        pbkdf2.pbkdf2(entropy.string(), 'salt', 1000, 4, 'sha512', (err, derivedKey) => {
-            if (err) { reject(err); }
-            else { 
-                console.log(derivedKey.toString('hex'));
-                resolve(derivedKey.toString('hex')).then((data) => {
-                    return data.value;
-                });
-            }
-        });
+    // Async pbkdf2 not updating prop in time, have to use sync function.
+    const key = pbkdf2.pbkdf2Sync(entropy.string(), 'salt', 1000, 4, 'sha512', (err, derivedKey) => {
+        if (err) { throw new Error(err) }
+        else { return derivedKey.toString('hex'); }
     });
+    // As well, casting to hex string twice for some reason yield correct output.
+    return key.toString('hex');
 }
 
 const decryptUrl = (encData, key) => {
@@ -54,10 +50,5 @@ const encryptUrl = (url, key) => {
     console.log('Encrypted: ', encrypted.toString());
     return encrypted;
 }
-
-// const generateSessionKey = () => {
-//     const entropy = new Entropy({ total: 1e6, risk: 1e9, charset: '0123456789abcdef' });
-//     return entropy.string();
-// }
 
 export { parseUrl, generateSessionKey, decryptUrl, encryptUrl };

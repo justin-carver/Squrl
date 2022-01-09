@@ -2,17 +2,17 @@ import Squrl from './components/Squrl';
 import Wrapper from './components/Wrapper';
 import Banner from './components/Banner';
 import Footer from './components/Footer';
+import Decrypter from './components/Decrypter';
 
 function App() {
   return (
-    <div className='flex flex-col'>
+    <div className='App grid place-items-center h-fit bg-gray-50 dark:bg-gray-900 p-24'>
       <Banner />
-      <div className="App grid place-items-center h-screen bg-gray-50 dark:bg-gray-900">
         <Wrapper>
           <Squrl />
+          <Decrypter />
         </Wrapper>
-        <Footer />     
-      </div>
+      <Footer />     
     </div>
   );
 }
