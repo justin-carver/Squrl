@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang=en>
+<head>
+<meta charset=utf-8>
+<title>Squrl Redirector</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/pbkdf2.js"></script>
+</head>
+<body>
+    <script>
+        const params = new URLSearchParams(window.location.href);
+        const decryptUrl = (url, pass) => {
+            let salt = CryptoJS.enc.Hex.parse(url.substr(0, 32));
+            let iv = CryptoJS.enc.Hex.parse(url.substr(32, 32));
+            let encrypted = url.substring(64);
+            
+            var key = CryptoJS.PBKDF2(pass, salt, {
+                keySize: 256 / 32,
+                iterations: 100
+            });
+    
+            let decrypted = CryptoJS.AES.decrypt(encrypted, key, { 
+                iv: iv, 
+                padding: CryptoJS.pad.Pkcs7,
+                mode: CryptoJS.mode.CBC
+            })
+            return decrypted;
+        }
+        window.location.assign(decryptUrl("<%=url%>", "<%=key%>").toString(CryptoJS.enc.Utf8));
+    </script>
+</body>
+</html>
