@@ -63,11 +63,5 @@
   "devDependencies": {
     "@babel/plugin-syntax-top-level-await": "^7.14.5",
     "sequin": "^0.1.1"
-  },
-  "browser": {
-    "crypto": "node_modules/crypto-js"
-  },
-  "node": {
-    "crypto": "node_modules/crypto-js"
   }
 }

@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
-import { generateSessionKey } from '../server/dbinteract';
+import { generateSessionKey } from '../dbinteract';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
 
 const SessionKeyField = (props) => {
 
-    const [sessionKey, setSessionKey] = useState('');
+    const [sessionKey, setSessionKey] = useState('defaultSessionKey');
 
     useEffect(() => {
-        setSessionKey(generateSessionKey);
-        props.onGenerateKey(sessionKey);
+        let tempKey = generateSessionKey();
+        props.onGenerateKey(tempKey);
+        setSessionKey(tempKey);
     }, []);
 
     return(
@@ -19,7 +20,7 @@ const SessionKeyField = (props) => {
             </label>
             <input className="shadow appearance-none border rounded w-full py-3 px-3 
             text-gray-700 bg-gray-300 leading-tight focus:outline-none focus:shadow-outline"
-            id="key" type="text" placeholder="" readOnly="readOnly" value={sessionKey}/>
+            id="session-key" type="text" placeholder="" readOnly="readOnly" value={sessionKey}/>
         </div>
     );
 }
