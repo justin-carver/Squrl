@@ -35,7 +35,7 @@ app.get('/', (req, res) => {
 app.get('/:urlRoute', (req, res) => {
     const urlRoute = req.params.urlRoute;
     const sessionKey = urlRoute.substring(urlRoute.indexOf('+') + 1, urlRoute.length);
-    if (urlRoute.includes('+') && urlRoute.length === 21) {
+    if (urlRoute.includes('+') && urlRoute.length === 13) { // hard coded: url://{urlRoute} '+' {sessionKey} = length
         if ((urlRoute.match(/\+/g)||[]).length > 1) return;
         if (sessionKey.length) {
             // There appears to be a session key attached. Verifying if this url is in the database?
@@ -43,15 +43,14 @@ app.get('/:urlRoute', (req, res) => {
                 if (!doc) { res.sendStatus(404) } //  There are no documents associated with this urlRoute.
                 else {
                     // urlRoute does exist, serve redirector with appropriate headers.
-                    console.log(doc);
-                    const nonce = new Entropy({ total: 1e6, risk: 1e9, charset: charset64 }).string();
+                    const nonce = new Entropy({ charset: charset64, bits: conf.bitLength  }).string(); // total: 1e4, risk: 1e6, 
                     res.setHeader("Content-Security-Policy", `object-src 'none'; script-src 'nonce-${nonce}' 'unsafe-inline' 'unsafe-eval' 'strict-dynamic' https: http:; base-uri 'none'`);
                     res.render('redirector', {
                         url : doc.encryptedUrl,
                         key : sessionKey,
                         nonce : nonce
                     });
-                    // Client will worry about decrypting.
+                    // Client will worry about decrypting and redirecting.
                     console.log(`Redirecting user for client-side decryption... god speed ${req.socket.remoteAddress}! o7`);
                 }
             }).catch(e => {
@@ -68,9 +67,8 @@ app.get('/:urlRoute', (req, res) => {
 
 app.post('/decrypt-url', (req, res) => {
     Url.findOne({ urlRoute : req.body.urlRoute, sessionKey : req.body.sessionKey }, (err, doc) => {
-        if (!doc) {
-            res.sendStatus(404)
-        } else {
+        if (!doc) { res.sendStatus(404) }
+        else {
             res.setHeader('content-type', 'application/json');
             res.json({
                 encryptedUrl : doc.encryptedUrl
@@ -80,7 +78,7 @@ app.post('/decrypt-url', (req, res) => {
 });
 
 app.post('/generate-url', (req, res) => {
-    const generatedRoute = new Entropy({ total: 1e4, risk: 1e9, charset: charset64 }).string();
+    const generatedRoute = new Entropy({ charset: charset64, bits: conf.bitLength }).string();
     Url.findOne({
         urlRoute : generatedRoute,
     }, (err, doc) => {
@@ -109,10 +107,10 @@ const generateUrlDocument = (req, res, generatedRoute) => {
         ipAddress : req.socket.remoteAddress
     }).save().then(dbentry => {
         console.log('Database Entry: ', dbentry, ' saved!');
-        // res.sendStatus(200);
+        // Should receive res.sendStatus(200) automatically.
     }).catch(e => {
         console.log('POST Error:', e);
-        // res.sendStatus(400);
+        res.sendStatus(400);
     });
 }
 
@@ -121,4 +119,3 @@ const beginListen = () => {
 }
 
 driver.connectDb(beginListen);
-

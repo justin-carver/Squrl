@@ -37,7 +37,7 @@ const parseUrl = async (sessionKey) => {
 
 // RFC 4648 compatible (URL friendly!)
 const generateSessionKey = () => {
-    const entropy = new Entropy({ total: 1e4, risk: 1e9, charset: charset64 });
+    const entropy = new Entropy({ charset: charset64, bits: 32 });
     return entropy.string();
 }
 
