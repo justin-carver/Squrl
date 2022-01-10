@@ -41,7 +41,7 @@ const generateSessionKey = () => {
     return entropy.string();
 }
 
-const encryptUrl = (encData, pass) => {
+const encryptUrl = (ptUrl, pass) => {
     let salt = cryptoJs.lib.WordArray.random(128/8);
     let iv = cryptoJs.lib.WordArray.random(128/8);
 
@@ -50,32 +50,32 @@ const encryptUrl = (encData, pass) => {
         iterations: 1000
     });
     
-    let encrypted = cryptoJs.AES.encrypt(encData, key, { 
+    let encrypted = cryptoJs.AES.encrypt(ptUrl, key, { 
         iv: iv, 
         padding: cryptoJs.pad.Pkcs7,
         mode: cryptoJs.mode.CBC  
     });
 
-    let url = salt.toString() + iv.toString() + encrypted.toString();
-    return url;
+    let encryptedUrl = salt.toString() + iv.toString() + encrypted.toString();
+    return encryptedUrl;
 }
 
-const decryptUrl = (url, pass) => {
-    let salt = cryptoJs.enc.Hex.parse(url.substr(0, 32));
-    let iv = cryptoJs.enc.Hex.parse(url.substr(32, 32));
-    let encrypted = url.substring(64);
+const decryptUrl = (encUrl, pass) => {
+    let salt = cryptoJs.enc.Hex.parse(encUrl.substr(0, 32));
+    let iv = cryptoJs.enc.Hex.parse(encUrl.substr(32, 32));
+    let encrypted = encUrl.substring(64);
     
     var key = cryptoJs.PBKDF2(pass, salt, {
         keySize: 256 / 32,
         iterations: 1000
     });
 
-    let decrypted = cryptoJs.AES.decrypt(encrypted, key, { 
+    let decryptedUrl = cryptoJs.AES.decrypt(encrypted, key, { 
         iv: iv, 
         padding: cryptoJs.pad.Pkcs7,
         mode: cryptoJs.mode.CBC
     })
-    return decrypted;
+    return decryptedUrl;
 }
 
 const getDecryptedUrlFromDb = async () => {

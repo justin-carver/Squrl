@@ -18,12 +18,12 @@
                 iterations: 1000
             });
     
-            let decrypted = CryptoJS.AES.decrypt(encrypted, key, { 
+            let decryptedUrl = CryptoJS.AES.decrypt(encrypted, key, { 
                 iv: iv, 
                 padding: CryptoJS.pad.Pkcs7,
                 mode: CryptoJS.mode.CBC
             })
-            return decrypted;
+            return decryptedUrl;
         }
         const decryptedUrl = decryptUrl("<%=url%>", "<%=key%>").toString(CryptoJS.enc.Utf8);
         if (decryptedUrl) {
