@@ -1,4 +1,5 @@
 
+// const rateLimit = require('express-rate-limit'); -- uncomment this if you do not use a conf file
 const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
@@ -19,7 +20,7 @@ app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, './views'));
 
 // Apply the rate limiting middleware to URL generation calls only
-app.use('/generate-url', conf.apiLimiter);
+app.use(['/generate-url', '/decrypt-url'], conf.apiLimiter);
 
 app.use(helmet());
 app.use(express.static(path.join(__dirname, '../../build/')));
@@ -65,6 +66,7 @@ app.get('/:urlRoute', (req, res) => {
     }
 });
 
+// Even though this is labeled as "decrypt", this serves only a single .ejs file.
 app.post('/decrypt-url', (req, res) => {
     Url.findOne({ urlRoute : req.body.urlRoute, sessionKey : req.body.sessionKey }, (err, doc) => {
         if (!doc) { res.sendStatus(404) }

@@ -27,8 +27,9 @@
         }
         const decryptedUrl = decryptUrl("<%=url%>", "<%=key%>").toString(CryptoJS.enc.Utf8);
         if (decryptedUrl) {
+            let destination = new URL(decryptedUrl);
             try {
-                window.location.assign(decryptedUrl);
+                window.location.assign(destination);
             } catch (e) {
                 window.location.assign('https://squrl.dev/');
             }

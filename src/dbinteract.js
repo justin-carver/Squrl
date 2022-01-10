@@ -63,6 +63,7 @@ const encryptUrl = (ptUrl, pass) => {
 const decryptUrl = (encUrl, pass) => {
     let salt = cryptoJs.enc.Hex.parse(encUrl.substr(0, 32));
     let iv = cryptoJs.enc.Hex.parse(encUrl.substr(32, 32));
+    console.log(salt.toString(), iv.toString());
     let encrypted = encUrl.substring(64);
     
     var key = cryptoJs.PBKDF2(pass, salt, {
