@@ -30,18 +30,22 @@ app.use(bodyParser.json({ extended: true }));
 app.use(morgan('combined', { stream: accessLogStream }))
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../../build/', 'index.html'));
+    res.rennder(path.join(__dirname, '../../build/', 'index.html'));
 })
 
 app.get('/:urlRoute', (req, res) => {
     const urlRoute = req.params.urlRoute;
     const sessionKey = urlRoute.substring(urlRoute.indexOf('+') + 1, urlRoute.length);
-    if (urlRoute.includes('+') && urlRoute.length === 13) { // hard coded: url://{urlRoute} '+' {sessionKey} = length
-        if ((urlRoute.match(/\+/g)||[]).length > 1) return;
+
+    // ---------
+
+    if ((urlRoute.match(/\+/g)||[]).length > 1) return;
+
+    if (urlRoute.includes('+') && urlRoute.length === 13) { // hard coded: url: {urlRoute} '+' {sessionKey} = length
         if (sessionKey.length) {
             // There appears to be a session key attached. Verifying if this url is in the database?
             Url.findOne({ urlRoute : urlRoute.substring(0, urlRoute.indexOf('+')) }, (err, doc) => {
-                if (!doc) { res.sendStatus(404) } //  There are no documents associated with this urlRoute.
+                if (!doc) { res.sendStatus(404) }
                 else {
                     // urlRoute does exist, serve redirector with appropriate headers.
                     const nonce = new Entropy({ charset: charset64, bits: conf.bitLength  }).string(); // total: 1e4, risk: 1e6, 
@@ -54,13 +58,23 @@ app.get('/:urlRoute', (req, res) => {
                     // Client will worry about decrypting and redirecting.
                     console.log(`Redirecting user for client-side decryption... god speed ${req.socket.remoteAddress}! o7`);
                 }
-            }).catch(e => {
-                console.log('Exception:', e);
-            });
-        } else {
-            // There is no session key appended, but prompt for password screen!
-            // Component may need to be created.
+            }).clone().catch(function(err){ console.log(err)});
         }
+    } else if (urlRoute.length === 6) {
+        Url.findOne({ urlRoute : urlRoute }, (err, doc) => {
+            if (!doc) { res.sendStatus(404) } //  There are no documents associated with this urlRoute.
+            else {
+                // If the db entry exists, we'll prompt for a password screen.
+                res.render('password');
+            }
+        }).clone().catch(function(err){ console.log(err)});
+    } else if (urlRoute.length === 7 && urlRoute.slice(-1) === '+') {     // Show info page to those who care.
+        Url.findOne({ urlRoute : urlRoute.substring(0, urlRoute.indexOf('+')) }, (err, doc) => {
+            if (!doc) { res.sendStatus(404) }
+            else {
+                res.render('info');
+            }
+        }).clone().catch(function(err){ console.log(err)});
     } else {
         res.sendStatus(406);
     }
@@ -93,6 +107,7 @@ app.post('/generate-url', (req, res) => {
             });
         } else {
             res.sendStatus(409).send('URL route was taken... odds of this happening are very slim.');
+            // TODO: user should be redirected at this point
         }
     });
 });

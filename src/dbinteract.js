@@ -19,7 +19,8 @@ const decryptUrlOptions = {
 }
 
 const parseUrl = async (sessionKey) => {
-    if (document.querySelector('#url').value !== "" && validUrl.isWebUri(document.querySelector('#url').value)) {
+    if (document.querySelector('#url').value !== "" && validUrl.isWebUri(document.querySelector('#url').value)
+    && document.querySelector('#url').value.length <= 1115) {
         document.querySelector('#squrl-error').innerHTML = "";
         generateRequestOptions.body = JSON.stringify({
             encryptedUrl : encryptUrl(document.querySelector('#url').value, sessionKey).toString()
@@ -30,6 +31,8 @@ const parseUrl = async (sessionKey) => {
         }).catch(e => {
             console.log('Failed to retrieve information from url: ', e);
         });
+    } else if (document.querySelector('#url').value.length > 1115) {
+        document.querySelector('#squrl-error').innerHTML = "URL is too long, even for this service.";
     } else {
         document.querySelector('#squrl-error').innerHTML = "Please enter a valid URL.";
     }

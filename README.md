@@ -1,6 +1,8 @@
 # Squrl
 
-Squrl, Secure Quick URL, is a URL shortening service that offers secure 100% client-side end-to-end encryption.
+Squrl, Secure Quick URL, is a URL shortening service that offers secure 100%, client-side end-to-end encryption.
+
+The goal is to create an application that encrypts all incoming URL data before storing it.
 
 ## Stack
 
@@ -74,3 +76,5 @@ These are some nice articles of information accommodating the reasoning and help
 - [Encryption / Decryption of Data  using PBKDF2 & AES](https://rhamedy.medium.com/encryption-decryption-of-data-based-on-users-password-using-pbkdf2-aes-algorithms-592f8c1bb79a)
 - [Small but powerful - Shortened URLs an Attack Vector](https://cofense.com/small-powerful-shortened-urls-attack-vector/)
 - [The Secrets in URL Shortening Services](https://www.sans.org/blog/the-secrets-in-url-shortening-services/)
+
+These were some of they *key* ones (get it) that impacted the reasoning for this project. For even more, type in `short url attacks` into Google and you'll get the idea.
