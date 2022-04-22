@@ -6,8 +6,8 @@ import Decrypter from './components/Decrypter';
 
 function App() {
   return (
-    <div className='App grid place-items-center h-fit bg-gray-50 dark:bg-gray-900 p-24'>
-      <Banner />
+    <div className='App grid place-items-center h-fit bg-gray-50 dark:bg-gray-900 mt-36'>
+      {/* <Banner /> */}
         <Wrapper>
           <Squrl />
           <Decrypter />

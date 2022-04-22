@@ -17,32 +17,13 @@ This is currently running a solid *MERN* stack, utilizing:
 
 In today's modern age, encryption and privacy must be a golden standard when working with any set of data leaving your network. Current large-scale popular URL shorteners (bit.ly, tinyurl) are a bane to this essential need by allowing third-party companies to gather massive amounts of analytics by using a simple link.
 
-With Squrl, to start, the current node server should be configured in the following setup:
-
-### Transport Security
-
-- [ ] All core dependencies should be up to date.
-- [ ] Node server should be hosted on a machine that supports SSL/TLS 1.3
-  - [ ] SSL certs will need to be generated from a root CA.
-- [ ] Utilize [Helmet](https://www.npmjs.com/package/helmet) when spinning up Express.
-- [ ] Configure appropriate secure session cookies.
-
-At this point, secure communications can occur to and from the server. The server is running on a strict HTTPS Transport mode and should be relatively secured. More steps should be taken to further protect the web server, but this is a good starting point.
-
-### Database Security
-
-- [ ] [Client-side Field Level Encryption](https://docs.mongodb.com/manual/core/security-client-side-encryption/) for MongoDB *can* be configured (if applicable) with appropriate settings for either deterministic or randomized encryption upon entering the db as well, on top of the current encryption. *This requires access to MongoDB Enterprise.*
-- [ ] All information is encrypted and decrypted on the client-side, which allows no exposed or plain-text information (generated routes or encrypted urls) to enter the database. **The database has no way to parse stored information on it's own.**
-
-## Encryption Process
+### Encryption
 
 The encryption process is very simple, yet surprisingly robust for what it needs to accomplish. Here is a useful diagram I produced that shows the [encryption/decryption flow (source)](https://i.imgur.com/KpjQUIe.png):
 
 <img src="https://i.imgur.com/KpjQUIe.png" width="50%"/>
 
 Here are the following steps that occur when encrypting the received URL information `(dbinteract.js)`:
-
-### Encryption
 
 1. Using entropy, a [CSPRNG](https://en.wikipedia.org/wiki/Cryptographically-secure_pseudorandom_number_generator) produces a randomized 32-bit session key and is represented as a secret 'passphrase'.
 2. Two randomized 128-bit word arrays are generated to comprise both the salt and IV for the initial shared encryption steps.

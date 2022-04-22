@@ -26,7 +26,7 @@ const parseUrl = async (sessionKey) => {
             encryptedUrl : encryptUrl(document.querySelector('#url').value, sessionKey).toString()
         });
         // Make post request to update db and store encrypted url
-        await fetch('/generate-url/', generateRequestOptions).then((res) => res.json()).then(json => {
+        await fetch('/generate-url', generateRequestOptions).then((res) => res.json()).then(json => {
             document.querySelector('#output').value = `https://squrl.dev/${json.urlRoute}`;
         }).catch(e => {
             console.log('Failed to retrieve information from url: ', e);
@@ -66,7 +66,7 @@ const encryptUrl = (ptUrl, pass) => {
 const decryptUrl = (encUrl, pass) => {
     let salt = cryptoJs.enc.Hex.parse(encUrl.substr(0, 32));
     let iv = cryptoJs.enc.Hex.parse(encUrl.substr(32, 32));
-    console.log(salt.toString(), iv.toString());
+    // console.log(salt.toString(), iv.toString());
     let encrypted = encUrl.substring(64);
     
     var key = cryptoJs.PBKDF2(pass, salt, {
@@ -89,7 +89,7 @@ const getDecryptedUrlFromDb = async () => {
 
     if (key.value !== "") {
         decryptUrlOptions.body = JSON.stringify({
-            urlRoute : squrlUrl.value,
+            urlRoute : squrlUrl.value.split('/')[squrlUrl.value.split('/').length - 1].substring(0, 6),
             sessionKey : key.value
         });
         await fetch('/decrypt-url', decryptUrlOptions).then((res) => res.json()).then(json => {

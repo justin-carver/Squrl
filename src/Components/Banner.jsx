@@ -15,7 +15,7 @@ const Banner = () => {
     }, [bannerVisbility]);
 
     return (
-    <div className={"Banner bg-indigo-700 fixed w-full z-10 " + bannerVisbility}>
+    <div className={"Banner bg-indigo-700 absolute top-0 w-full z-10" + bannerVisbility}>
         <div className="max-w-2xl mx-auto py-2 px-3 sm:px-6 lg:px-8">
             <div className="flex items-center flex-wrap">
                 <div className="w-0 flex-1 flex items-center">

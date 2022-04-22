@@ -30,7 +30,7 @@ app.use(bodyParser.json({ extended: true }));
 app.use(morgan('combined', { stream: accessLogStream }))
 
 app.get('/', (req, res) => {
-    res.rennder(path.join(__dirname, '../../build/', 'index.html'));
+    res.render(path.join(__dirname, '../../build/', 'index.html'));
 })
 
 app.get('/:urlRoute', (req, res) => {
@@ -106,7 +106,7 @@ app.post('/generate-url', (req, res) => {
                 urlRoute : generatedRoute
             });
         } else {
-            res.sendStatus(409).send('URL route was taken... odds of this happening are very slim.');
+            res.sendStatus(409).send('URL route was taken... odds of this happening are very slim.').send(err);
             // TODO: user should be redirected at this point
         }
     });
@@ -121,10 +121,9 @@ const generateUrlDocument = (req, res, generatedRoute) => {
     Url({
         urlRoute : generatedRoute,
         encryptedUrl : req.body.encryptedUrl,
-        ipAddress : req.socket.remoteAddress
+        userAgent : req.get('User-Agent')
     }).save().then(dbentry => {
         console.log('Database Entry: ', dbentry, ' saved!');
-        // Should receive res.sendStatus(200) automatically.
     }).catch(e => {
         console.log('POST Error:', e);
         res.sendStatus(400);

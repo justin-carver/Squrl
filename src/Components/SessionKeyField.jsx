@@ -14,7 +14,7 @@ const SessionKeyField = (props) => {
     }, []);
 
     return(
-        <div className="mb-10">
+        <div className="mb-2">
             <label className="block text-gray-300 text-sm font-bold mb-2" htmlFor="url">
                 Generated Session Key ( <i className="text-slate-300">Share to make link public!</i> <FontAwesomeIcon icon={faLink} /> )
             </label>

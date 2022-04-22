@@ -10,9 +10,9 @@ const urlSchema = new Schema({
         type: String,
         required : true
     },
-    ipAddress : {
+    userAgent : {
         type: String,
-        required: true
+        required : true
     }
 }, { timestamps: true });
 
