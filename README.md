@@ -8,10 +8,10 @@ The goal is to create an application that encrypts all incoming URL data before 
 
 This is currently running a solid *MERN* stack, utilizing:
 
-- **MongoDB w/ Mongoose**: Client-side File Level Encryption & Redirect Collection
-- **Express**: Router and API Endpoint
-- **React**: Front-End w/ TailwindCSS
-- **Node**: Back-End
+- **MongoDB w/ Mongoose**: Database and driver
+- **Express**: Router and API Endpoints
+- **React**: w/ TailwindCSS
+- **Node**: Back-end
 
 ## End-to-End Encryption 🔐
 

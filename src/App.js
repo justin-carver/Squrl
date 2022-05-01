@@ -1,6 +1,6 @@
 import Squrl from './components/Squrl';
 import Wrapper from './components/Wrapper';
-import Banner from './components/Banner';
+// import Banner from './components/Banner';
 import Footer from './components/Footer';
 import Decrypter from './components/Decrypter';
 

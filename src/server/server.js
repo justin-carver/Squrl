@@ -14,30 +14,34 @@ const app = express();
 const accessLogStream = rfs.createStream('access.log', {
     interval: '1d', // rotate daily
     path: path.join(__dirname, 'logs')
-})
+});
 
-app.set('view engine', 'ejs')
+app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, './views'));
 
 // Apply the rate limiting middleware to URL generation calls only
-app.use(['/generate-url', '/decrypt-url'], conf.apiLimiter);
+// TODO: Display prompt to users who are being rate limited.
+app.use(['/generate-url', '/decrypt-url', '/generateSessionKey'], conf.apiLimiter);
 
 app.use(helmet());
 app.use(express.static(path.join(__dirname, '../../build/')));
 app.use(bodyParser.json({ extended: true }));
 
-// setup the logger
-app.use(morgan('combined', { stream: accessLogStream }))
+app.use(morgan('combined', { stream: accessLogStream }));
 
 app.get('/', (req, res) => {
     res.render(path.join(__dirname, '../../build/', 'index.html'));
 })
 
+app.get('/generateSessionKey', (req, res) => {
+    res.send({
+        sessionKey : new Entropy({ charset: charset64, bits: 32 }).string()
+    });
+});
+
 app.get('/:urlRoute', (req, res) => {
     const urlRoute = req.params.urlRoute;
     const sessionKey = urlRoute.substring(urlRoute.indexOf('+') + 1, urlRoute.length);
-
-    // ---------
 
     if ((urlRoute.match(/\+/g)||[]).length > 1) return;
 
@@ -49,14 +53,16 @@ app.get('/:urlRoute', (req, res) => {
                 else {
                     // urlRoute does exist, serve redirector with appropriate headers.
                     const nonce = new Entropy({ charset: charset64, bits: conf.bitLength  }).string(); // total: 1e4, risk: 1e6, 
-                    res.setHeader("Content-Security-Policy", `object-src 'none'; script-src 'nonce-${nonce}' 'unsafe-inline' 'unsafe-eval' 'strict-dynamic' https: http:; base-uri 'none'`);
+                    res.setHeader("Content-Security-Policy", `object-src 'none'; script-src 'nonce-${nonce}' 'strict-dynamic' https: http:; base-uri 'self'`);
                     res.render('redirector', {
                         url : doc.encryptedUrl,
                         key : sessionKey,
                         nonce : nonce
+                    }, (err, html) => {
+                        res.send(html);
                     });
                     // Client will worry about decrypting and redirecting.
-                    console.log(`Redirecting user for client-side decryption... god speed ${req.socket.remoteAddress}! o7`);
+                    console.log(`Redirecting user for client-side decryption... god speed! o7`);
                 }
             }).clone().catch(function(err){ console.log(err)});
         }
@@ -80,17 +86,18 @@ app.get('/:urlRoute', (req, res) => {
     }
 });
 
-// Even though this is labeled as "decrypt", this serves only a single .ejs file.
 app.post('/decrypt-url', (req, res) => {
-    Url.findOne({ urlRoute : req.body.urlRoute, sessionKey : req.body.sessionKey }, (err, doc) => {
-        if (!doc) { res.sendStatus(404) }
-        else {
-            res.setHeader('content-type', 'application/json');
-            res.json({
-                encryptedUrl : doc.encryptedUrl
-            });
-        }
-    })
+    // if (req.body.urlRoute !== undefined) {
+        Url.findOne({ urlRoute : req.body.urlRoute, sessionKey : req.body.sessionKey }, (err, doc) => {
+            if (!doc) { res.sendStatus(404) }
+            else {
+                res.setHeader('content-type', 'application/json');
+                res.json({
+                    encryptedUrl : doc.encryptedUrl
+                });
+            }
+        })
+    // }
 });
 
 app.post('/generate-url', (req, res) => {
@@ -107,7 +114,6 @@ app.post('/generate-url', (req, res) => {
             });
         } else {
             res.sendStatus(409).send('URL route was taken... odds of this happening are very slim.').send(err);
-            // TODO: user should be redirected at this point
         }
     });
 });

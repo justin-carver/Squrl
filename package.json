@@ -63,6 +63,7 @@
   },
   "devDependencies": {
     "@babel/plugin-syntax-top-level-await": "^7.14.5",
+    "node-fetch": "^3.2.3",
     "sequin": "^0.1.1"
   }
 }

@@ -1,7 +1,7 @@
 const cryptoJs = require('crypto-js');
 const validUrl = require('valid-url');
-const { Entropy, charset64 } = require('entropy-string');
 
+// Request options separated for flexibility later.
 const generateRequestOptions = {
     method: 'POST',
     headers: {
@@ -20,7 +20,7 @@ const decryptUrlOptions = {
 
 const parseUrl = async (sessionKey) => {
     if (document.querySelector('#url').value !== "" && validUrl.isWebUri(document.querySelector('#url').value)
-    && document.querySelector('#url').value.length <= 1115) {
+    && document.querySelector('#url').value.length <= 2083) {
         document.querySelector('#squrl-error').innerHTML = "";
         generateRequestOptions.body = JSON.stringify({
             encryptedUrl : encryptUrl(document.querySelector('#url').value, sessionKey).toString()
@@ -31,17 +31,11 @@ const parseUrl = async (sessionKey) => {
         }).catch(e => {
             console.log('Failed to retrieve information from url: ', e);
         });
-    } else if (document.querySelector('#url').value.length > 1115) {
+    } else if (document.querySelector('#url').value.length > 2083) {
         document.querySelector('#squrl-error').innerHTML = "URL is too long, even for this service.";
     } else {
         document.querySelector('#squrl-error').innerHTML = "Please enter a valid URL.";
     }
-}
-
-// RFC 4648 compatible (URL friendly!)
-const generateSessionKey = () => {
-    const entropy = new Entropy({ charset: charset64, bits: 32 });
-    return entropy.string();
 }
 
 const encryptUrl = (ptUrl, pass) => {
@@ -50,7 +44,7 @@ const encryptUrl = (ptUrl, pass) => {
 
     var key = cryptoJs.PBKDF2(pass, salt, {
         keySize: 256/32,
-        iterations: 1000
+        iterations: 4096
     });
     
     let encrypted = cryptoJs.AES.encrypt(ptUrl, key, { 
@@ -66,12 +60,12 @@ const encryptUrl = (ptUrl, pass) => {
 const decryptUrl = (encUrl, pass) => {
     let salt = cryptoJs.enc.Hex.parse(encUrl.substr(0, 32));
     let iv = cryptoJs.enc.Hex.parse(encUrl.substr(32, 32));
-    // console.log(salt.toString(), iv.toString());
+
     let encrypted = encUrl.substring(64);
     
     var key = cryptoJs.PBKDF2(pass, salt, {
         keySize: 256 / 32,
-        iterations: 1000
+        iterations: 4096
     });
 
     let decryptedUrl = cryptoJs.AES.decrypt(encrypted, key, { 
@@ -102,4 +96,4 @@ const getDecryptedUrlFromDb = async () => {
     }
 }
 
-export { getDecryptedUrlFromDb, parseUrl, generateSessionKey, decryptUrl, encryptUrl };
+export { getDecryptedUrlFromDb, parseUrl, decryptUrl, encryptUrl };

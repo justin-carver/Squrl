@@ -1,39 +1,39 @@
 <!doctype html>
 <html lang=en>
-<head>
-<meta charset=utf-8>
-<title>Squrl Redirector</title>
-<script nonce="<%=nonce%>" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
-<script nonce="<%=nonce%>" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/pbkdf2.js"></script>
-</head>
-<body>
-    <script nonce="<%=nonce%>">
-        const decryptUrl = (url, pass) => {
-            let salt = CryptoJS.enc.Hex.parse(url.substr(0, 32));
-            let iv = CryptoJS.enc.Hex.parse(url.substr(32, 32));
-            let encrypted = url.substring(64);
-            
-            var key = CryptoJS.PBKDF2(pass, salt, {
-                keySize: 256 / 32,
-                iterations: 1000
-            });
-    
-            let decryptedUrl = CryptoJS.AES.decrypt(encrypted, key, { 
-                iv: iv, 
-                padding: CryptoJS.pad.Pkcs7,
-                mode: CryptoJS.mode.CBC
-            })
-            return decryptedUrl;
-        }
-        const decryptedUrl = decryptUrl("<%=url%>", "<%=key%>").toString(CryptoJS.enc.Utf8);
-        if (decryptedUrl) {
-            let destination = new URL(decryptedUrl);
-            try {
-                window.location.assign(destination);
-            } catch (e) {
-                window.location.assign('https://squrl.dev/');
+    <head>
+        <meta charset=utf-8>
+        <title>Squrl Redirector</title>
+        <script nonce="<%=nonce%>" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+        <script nonce="<%=nonce%>" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/pbkdf2.js"></script>
+    </head>
+    <body>
+        <script nonce="<%=nonce%>">
+            const decryptUrl = (url, pass) => {
+                let salt = CryptoJS.enc.Hex.parse(url.substr(0, 32));
+                let iv = CryptoJS.enc.Hex.parse(url.substr(32, 32));
+                let encrypted = url.substring(64);
+                
+                var key = CryptoJS.PBKDF2(pass, salt, {
+                    keySize: 256 / 32,
+                    iterations: 4096
+                });
+        
+                let decryptedUrl = CryptoJS.AES.decrypt(encrypted, key, { 
+                    iv: iv, 
+                    padding: CryptoJS.pad.Pkcs7,
+                    mode: CryptoJS.mode.CBC
+                })
+                return decryptedUrl;
             }
-        }
-    </script>
-</body>
+            const decryptedUrl = decryptUrl("<%=url%>", "<%=key%>").toString(CryptoJS.enc.Utf8);
+            if (decryptedUrl) {
+                try {
+                    let destination = new URL(decryptedUrl);
+                    window.location.assign(destination);
+                } catch (e) {
+                    window.location.assign('https://squrl.dev/');
+                }
+            }
+        </script>
+    </body>
 </html>

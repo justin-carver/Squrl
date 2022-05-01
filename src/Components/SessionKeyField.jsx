@@ -1,16 +1,17 @@
 import { useState, useEffect } from "react";
-import { generateSessionKey } from '../dbinteract';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
 
 const SessionKeyField = (props) => {
-
-    const [sessionKey, setSessionKey] = useState('defaultSessionKey');
+    const [sessionKey, setSessionKey] = useState('');
 
     useEffect(() => {
-        let tempKey = generateSessionKey();
-        props.onGenerateKey(tempKey);
-        setSessionKey(tempKey);
+        (async () => {
+            let tempKey = await fetch('/generateSessionKey').then(res => res.json()).then(json => json.sessionKey);
+            // Need to pass sessionKey to both SessionKeyField and Squrl components.
+            props.onGenerateKey(tempKey);
+            setSessionKey(tempKey);
+        })();
     }, []);
 
     return(
