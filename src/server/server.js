@@ -53,7 +53,7 @@ app.get('/:urlRoute', (req, res) => {
                 else {
                     // urlRoute does exist, serve redirector with appropriate headers.
                     const nonce = new Entropy({ charset: charset64, bits: conf.bitLength  }).string(); // total: 1e4, risk: 1e6, 
-                    res.setHeader("Content-Security-Policy", `object-src 'none'; script-src 'nonce-${nonce}' 'strict-dynamic' https: http:; base-uri 'self'`);
+                    res.setHeader("Content-Security-Policy", `object-src 'none'; script-src 'nonce-${nonce}' 'strict-dynamic'`);
                     res.render('redirector', {
                         url : doc.encryptedUrl,
                         key : sessionKey,
@@ -71,7 +71,13 @@ app.get('/:urlRoute', (req, res) => {
             if (!doc) { res.sendStatus(404) } //  There are no documents associated with this urlRoute.
             else {
                 // If the db entry exists, we'll prompt for a password screen.
-                res.render('password');
+                const nonce = new Entropy({ charset: charset64, bits: conf.bitLength  }).string(); // total: 1e4, risk: 1e6, 
+                res.setHeader("Content-Security-Policy", `object-src 'none'; script-src 'nonce-${nonce}' 'strict-dynamic'`);
+                res.render('password', {
+                    nonce : nonce
+                }, (err, html) => {
+                    res.send(html);
+                });
             }
         }).clone().catch(function(err){ console.log(err)});
     } else if (urlRoute.length === 7 && urlRoute.slice(-1) === '+') {     // Show info page to those who care.
