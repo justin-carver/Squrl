@@ -1,12 +1,76 @@
+<!-- This will not be used in prod! Keeping here for later viewing. -->
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    This is the info screen! Were you sent here looking for information???
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>squrl info</title>
+        <style>
+            html {
+                background-color: rgb(17 24 39);
+                font-family: Helvetica;
+                font-size: 1.2rem;
+                color: white;
+                overflow: hidden;
+            }
+            body {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+                width: 100vw;
+            }
+            .Info__disclaimer {
+                font-size: 0.6rem;
+                margin-top: 10px;
+                text-align: center;
+            }
+            .Info__disclaimer a {
+                color: rgb(44, 139, 255);
+                text-decoration: none;
+            }
+            .Info__header {
+                font-size: 1.1rem;
+            }
+            .Info__squrl {
+                transition: transform .7s ease-in-out;
+                margin-top: -60%;
+                z-index: -10;
+                transform: scaleX(-1) rotate(15deg);
+                scale: 0.4;
+            }
+            .Info__squrl:hover {
+                transform: scaleX(-1) rotate(375deg);
+            }
+            .Info__wrapper {
+                background-color: rgb(55 65 81);
+                padding: 1.25rem;
+                width: 25em;
+                border-radius: 0.5rem;
+            }
+        </style>
+    </head>
+    <body>
+        <a href="https://squrl.dev/"><img src="/squrl.png" class="Info__squrl"/></a>
+        <div class="Info__wrapper">
+            <div class="Info__input">
+                <script nonce="<%=nonce%>">
+                    const init = async () => {
+                        await fetch('/creation-date');
+                        document.querySelector(".Info__date").innerHTML = "";
+                    }
+                    window.onload = init;
+                </script>
+                <div class="Info__header">
+                    <p>Link Created: <span class="Info__date"></span></p>
+                </div>
+            </div>
+        </div>
+        <div class="Info__disclaimer">
+            <p>Most data and analytics pertaining to this link are not available for a reason!</p>
+            <p>If you'd like to create your own shortened, end-to-end encrypted URL, please visit <a href="https://squrl.dev">squrl.dev!</a></p>
+        </div>
+    </body>
 </html>

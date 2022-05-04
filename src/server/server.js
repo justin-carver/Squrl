@@ -80,16 +80,27 @@ app.get('/:urlRoute', (req, res) => {
                 });
             }
         }).clone().catch(function(err){ console.log(err)});
-    } else if (urlRoute.length === 7 && urlRoute.slice(-1) === '+') {     // Show info page to those who care.
-        Url.findOne({ urlRoute : urlRoute.substring(0, urlRoute.indexOf('+')) }, (err, doc) => {
-            if (!doc) { res.sendStatus(404) }
-            else {
-                res.render('info');
-            }
-        }).clone().catch(function(err){ console.log(err)});
+    // After some deliberation, the info page will not be used. Keeping this here for potential later use.
+    // } else if (urlRoute.length === 7 && urlRoute.slice(-1) === '+') {     // Show info page to those who care.
+    //     Url.findOne({ urlRoute : urlRoute.substring(0, urlRoute.indexOf('+')) }, (err, doc) => {
+    //         if (!doc) { res.sendStatus(404) }
+    //         else {
+    //             const nonce = new Entropy({ charset: charset64, bits: conf.bitLength  }).string(); // total: 1e4, risk: 1e6, 
+    //             res.setHeader("Content-Security-Policy", `object-src 'none'; script-src 'nonce-${nonce}' 'strict-dynamic'`);
+    //             res.render('info', {
+    //                 nonce : nonce
+    //             }, (err, html) => {
+    //                 res.send(html);
+    //             });
+    //         }
+    //     }).clone().catch(function(err){ console.log(err)});
     } else {
         res.sendStatus(406);
     }
+});
+
+app.get('*', (req, res) => {
+    res.status(404).send('So secure, we can\'t even find it...');
 });
 
 app.post('/decrypt-url', (req, res) => {
@@ -122,11 +133,6 @@ app.post('/generate-url', (req, res) => {
             res.sendStatus(409).send('URL route was taken... odds of this happening are very slim.').send(err);
         }
     });
-});
-
-//The 404 Route (ALWAYS Keep this as the last route)
-app.get('*', (req, res) => {
-    res.status(404).send('So secure, we can\'t even find it...');
 });
 
 const generateUrlDocument = (req, res, generatedRoute) => {
