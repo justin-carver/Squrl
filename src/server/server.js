@@ -1,5 +1,10 @@
 
 // const rateLimit = require('express-rate-limit'); -- uncomment this if you do not use a conf file
+const fs = require('fs');
+const http = require('http');
+const https = require('https');
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/squrl.dev/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/squrl.dev/fullchain.pem', 'utf8')
 const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
@@ -15,6 +20,11 @@ const accessLogStream = rfs.createStream('access.log', {
     interval: '1d', // rotate daily
     path: path.join(__dirname, 'logs')
 });
+
+const credentials = {
+    key : privateKey,
+    cert : certificate
+}
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, './views'));
@@ -148,8 +158,16 @@ const generateUrlDocument = (req, res, generatedRoute) => {
     });
 }
 
+const httpServer = http.createServer(app);
+const httpsServer = https.createServer(credentials, app);
+
 const beginListen = () => {
-    app.listen(3000);
+    httpServer.listen(80, () => {
+        console.log('Server has started on port 80!');
+    });
+    httpsServer.listen(443, () => {
+        console.log('Server has started on port 443!');
+    });
 }
 
 driver.connectDb(beginListen);
