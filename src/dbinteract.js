@@ -27,7 +27,7 @@ const parseUrl = async (sessionKey) => {
         });
         // Make post request to update db and store encrypted url
         await fetch('/generate-url', generateRequestOptions).then((res) => res.json()).then(json => {
-            document.querySelector('#output').value = `https://squrl.dev/${json.urlRoute}`;
+            document.querySelector('#output').value = `https://squrl.dev/${json.urlRoute}+${sessionKey}`;
         }).catch(e => {
             console.log('Failed to retrieve information from url: ', e);
         });
