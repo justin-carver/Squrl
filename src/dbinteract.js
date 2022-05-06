@@ -39,36 +39,36 @@ const parseUrl = async (sessionKey) => {
 }
 
 const encryptUrl = (ptUrl, pass) => {
-    let salt = cryptoJs.lib.WordArray.random(128/8);
-    let iv = cryptoJs.lib.WordArray.random(128/8);
+    const salt = cryptoJs.lib.WordArray.random(128/8);
+    const iv = cryptoJs.lib.WordArray.random(128/8);
 
     var key = cryptoJs.PBKDF2(pass, salt, {
         keySize: 256/32,
         iterations: 4096
     });
     
-    let encrypted = cryptoJs.AES.encrypt(ptUrl, key, { 
+    const encrypted = cryptoJs.AES.encrypt(ptUrl, key, { 
         iv: iv, 
         padding: cryptoJs.pad.Pkcs7,
         mode: cryptoJs.mode.CBC  
     });
 
-    let encryptedUrl = salt.toString() + iv.toString() + encrypted.toString();
+    const encryptedUrl = salt.toString() + iv.toString() + encrypted.toString();
     return encryptedUrl;
 }
 
 const decryptUrl = (encUrl, pass) => {
-    let salt = cryptoJs.enc.Hex.parse(encUrl.substr(0, 32));
-    let iv = cryptoJs.enc.Hex.parse(encUrl.substr(32, 32));
+    const salt = cryptoJs.enc.Hex.parse(encUrl.substr(0, 32));
+    const iv = cryptoJs.enc.Hex.parse(encUrl.substr(32, 32));
 
-    let encrypted = encUrl.substring(64);
+    const encrypted = encUrl.substring(64);
     
     var key = cryptoJs.PBKDF2(pass, salt, {
         keySize: 256 / 32,
         iterations: 4096
     });
 
-    let decryptedUrl = cryptoJs.AES.decrypt(encrypted, key, { 
+    const decryptedUrl = cryptoJs.AES.decrypt(encrypted, key, { 
         iv: iv, 
         padding: cryptoJs.pad.Pkcs7,
         mode: cryptoJs.mode.CBC
@@ -77,9 +77,9 @@ const decryptUrl = (encUrl, pass) => {
 }
 
 const getDecryptedUrlFromDb = async () => {
-    let decryptedUrl = document.querySelector('#decrypted-url');
-    let squrlUrl = document.querySelector('#encrypted-url');
-    let key = document.querySelector('#key');
+    const decryptedUrl = document.querySelector('#decrypted-url');
+    const squrlUrl = document.querySelector('#encrypted-url');
+    const key = document.querySelector('#key');
 
     if (key.value !== "") {
         decryptUrlOptions.body = JSON.stringify({

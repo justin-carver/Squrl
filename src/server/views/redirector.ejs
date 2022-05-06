@@ -9,16 +9,16 @@
     <body>
         <script nonce="<%=nonce%>">
             const decryptUrl = (url, pass) => {
-                let salt = CryptoJS.enc.Hex.parse(url.substr(0, 32));
-                let iv = CryptoJS.enc.Hex.parse(url.substr(32, 32));
-                let encrypted = url.substring(64);
+                const salt = CryptoJS.enc.Hex.parse(url.substr(0, 32));
+                const iv = CryptoJS.enc.Hex.parse(url.substr(32, 32));
+                const encrypted = url.substring(64);
                 
                 var key = CryptoJS.PBKDF2(pass, salt, {
                     keySize: 256 / 32,
                     iterations: 4096
                 });
         
-                let decryptedUrl = CryptoJS.AES.decrypt(encrypted, key, { 
+                const decryptedUrl = CryptoJS.AES.decrypt(encrypted, key, { 
                     iv: iv, 
                     padding: CryptoJS.pad.Pkcs7,
                     mode: CryptoJS.mode.CBC
@@ -28,7 +28,7 @@
             const decryptedUrl = decryptUrl("<%=url%>", "<%=key%>").toString(CryptoJS.enc.Utf8);
             if (decryptedUrl) {
                 try {
-                    let destination = new URL(decryptedUrl);
+                    const destination = new URL(decryptedUrl);
                     window.location.assign(destination);
                 } catch (e) {
                     window.location.assign('https://squrl.dev/');

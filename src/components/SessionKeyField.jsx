@@ -7,7 +7,7 @@ const SessionKeyField = (props) => {
 
     useEffect(() => {
         (async () => {
-            let tempKey = await fetch('/generateSessionKey').then(res => res.json()).then(json => json.sessionKey);
+            const tempKey = await fetch('/generateSessionKey').then(res => res.json()).then(json => json.sessionKey);
             // Need to pass sessionKey to both SessionKeyField and Squrl components.
             props.onGenerateKey(tempKey);
             setSessionKey(tempKey);

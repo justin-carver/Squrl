@@ -6,7 +6,7 @@ const Decrypter = () => {
 
     const launchDecrypter = (e) => {
         e.preventDefault();
-        let key = document.querySelector('#key').value;
+        const key = document.querySelector('#key').value;
         if (key.value !== undefined || key.value !== '') {
             getDecryptedUrlFromDb();
         }
