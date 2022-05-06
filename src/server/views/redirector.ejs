@@ -13,7 +13,7 @@
                 const iv = CryptoJS.enc.Hex.parse(url.substr(32, 32));
                 const encrypted = url.substring(64);
                 
-                var key = CryptoJS.PBKDF2(pass, salt, {
+                const key = CryptoJS.PBKDF2(pass, salt, {
                     keySize: 256 / 32,
                     iterations: 4096
                 });

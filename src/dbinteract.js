@@ -42,7 +42,7 @@ const encryptUrl = (ptUrl, pass) => {
     const salt = cryptoJs.lib.WordArray.random(128/8);
     const iv = cryptoJs.lib.WordArray.random(128/8);
 
-    var key = cryptoJs.PBKDF2(pass, salt, {
+    const key = cryptoJs.PBKDF2(pass, salt, {
         keySize: 256/32,
         iterations: 4096
     });
@@ -63,7 +63,7 @@ const decryptUrl = (encUrl, pass) => {
 
     const encrypted = encUrl.substring(64);
     
-    var key = cryptoJs.PBKDF2(pass, salt, {
+    const key = cryptoJs.PBKDF2(pass, salt, {
         keySize: 256 / 32,
         iterations: 4096
     });
