@@ -1,69 +1,76 @@
 {
-  "name": "squrl",
-  "version": "0.1.0",
-  "private": true,
-  "homepage": "./",
-  "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.36",
-    "@fortawesome/free-solid-svg-icons": "^5.15.4",
-    "@fortawesome/react-fontawesome": "^0.1.16",
-    "@testing-library/jest-dom": "^5.16.1",
-    "@testing-library/react": "^12.1.2",
-    "@testing-library/user-event": "^13.5.0",
-    "autoprefixer": "^10.4.2",
-    "body-parser": "^1.19.1",
-    "buffer": "^6.0.3",
-    "cipher-base": "^1.0.4",
-    "crypto-browserify": "^3.12.0",
-    "crypto-js": "^4.1.1",
-    "ejs": "^3.1.6",
-    "entropy-string": "^4.2.0",
-    "express": "^4.17.2",
-    "express-rate-limit": "^6.0.5",
-    "helmet": "^5.0.1",
-    "mongodb": "^4.3.0",
-    "mongoose": "^6.1.5",
-    "morgan": "^1.10.0",
-    "node": "^17.3.0",
-    "pbkdf2": "^3.1.2",
-    "postcss": "^8.4.5",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-scripts": "^5.0.0",
-    "rotating-file-stream": "^3.0.2",
-    "stream": "0.0.2",
-    "tailwindcss": "^3.0.12",
-    "valid-url": "^1.0.9",
-    "web-vitals": "^2.1.3"
-  },
-  "scripts": {
-    "prod": "npm run build && node ./src/server/server.js",
-    "start": "set \"BROWSER=none\" && react-scripts start",
-    "build": "set \"GENERATE_SOURCEMAP=false\" && react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "@babel/plugin-syntax-top-level-await": "^7.14.5",
-    "node-fetch": "^3.2.3",
-    "sequin": "^0.1.1"
-  }
+    "name": "squrl",
+    "version": "0.1.0",
+    "private": true,
+    "homepage": "./",
+    "dependencies": {
+        "@fortawesome/fontawesome-svg-core": "^1.2.36",
+        "@fortawesome/free-solid-svg-icons": "^5.15.4",
+        "@fortawesome/react-fontawesome": "^0.1.16",
+        "@testing-library/jest-dom": "^5.16.1",
+        "@testing-library/react": "^12.1.2",
+        "@testing-library/user-event": "^13.5.0",
+        "autoprefixer": "^10.4.2",
+        "body-parser": "^1.19.1",
+        "buffer": "^6.0.3",
+        "cipher-base": "^1.0.4",
+        "crypto-browserify": "^3.12.0",
+        "crypto-js": "^4.1.1",
+        "ejs": "^3.1.6",
+        "entropy-string": "^4.2.0",
+        "express": "^4.17.2",
+        "express-rate-limit": "^6.0.5",
+        "helmet": "^5.0.1",
+        "mongodb": "^4.3.0",
+        "mongoose": "^6.1.5",
+        "morgan": "^1.10.0",
+        "node": "^17.3.0",
+        "pbkdf2": "^3.1.2",
+        "postcss": "^8.4.5",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2",
+        "react-scripts": "^5.0.0",
+        "rotating-file-stream": "^3.0.2",
+        "stream": "0.0.2",
+        "tailwindcss": "^3.0.12",
+        "valid-url": "^1.0.9",
+        "web-vitals": "^2.1.3"
+    },
+    "scripts": {
+        "prod": "npm run build && node ./src/server/server.js",
+        "start": "set \"BROWSER=none\" && react-scripts start",
+        "build": "set \"GENERATE_SOURCEMAP=false\" && react-scripts build",
+        "test": "react-scripts test",
+        "eject": "react-scripts eject"
+    },
+    "prettier": {
+        "trailingComma": "es5",
+        "printWidth": 100,
+        "tabWidth": 4,
+        "semi": true,
+        "singleQuote": true
+    },
+    "eslintConfig": {
+        "extends": [
+            "react-app",
+            "react-app/jest"
+        ]
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "devDependencies": {
+        "@babel/plugin-syntax-top-level-await": "^7.14.5",
+        "node-fetch": "^3.2.3",
+        "sequin": "^0.1.1"
+    }
 }

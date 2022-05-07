@@ -4,6 +4,6 @@ const Wrapper = (props) => {
             {props.children}
         </div>
     );
-}
+};
 
 export default Wrapper;

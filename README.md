@@ -6,12 +6,12 @@ The goal is to create an application that encrypts all incoming URL data before 
 
 ## Stack
 
-This is currently running a solid *MERN* stack, utilizing:
+This is currently running a solid _MERN_ stack, utilizing:
 
-- **MongoDB w/ Mongoose**: Database and driver
-- **Express**: Router and API Endpoints
-- **React**: w/ TailwindCSS
-- **Node**: Back-end
+-   **MongoDB w/ Mongoose**: Database and driver
+-   **Express**: Router and API Endpoints
+-   **React**: w/ TailwindCSS
+-   **Node**: Back-end
 
 ## End-to-End Encryption 🔐
 
@@ -29,7 +29,7 @@ Here are the following steps that occur when encrypting the received URL informa
 2. Two randomized 128-bit word arrays are generated to comprise both the salt and IV for the initial shared encryption steps.
 3. The salt and session key are then both fed into a [PBKDF2](https://en.wikipedia.org/wiki/PBKDF2) hashing algorithm to generate a hashed key.
 4. The hashed key and plain-text are then fed into the AES-256-CBC encryption algorithm to generate the final encrypted URL to be stored in the database.
-   1. The stored encrypted data also contains the salt and IV embedded into itself for easy access in the decryption function.
+    1. The stored encrypted data also contains the salt and IV embedded into itself for easy access in the decryption function.
 5. Alongside the encrypted URL, another 32-bit CSPRNG generated key is produced and compared to the current URL route that points to the location of the database entry after verifying it doesn't exist.
 
 During this process, all encryption and decryption happens client-side with the help of local `crypto-js` modules. Absolutely no plain-text information is sent between the server and client. The only connection that is made is it's final query the database to verify the randomly generated route URL has not been taken. If not, we'll store the encrypted URL in the database.
@@ -52,10 +52,10 @@ This redirect method was chosen to represent a full client-side encryption exper
 
 These are some nice articles of information accommodating the reasoning and help for this project:
 
-- [Guess what? URL shorteners short-circuit cloud security](https://arstechnica.com/information-technology/2016/04/guess-what-url-shorteners-short-circuit-cloud-security/)
-- [Gone in Six Characters: Short URLs Considered Harmful for Cloud services](https://arxiv.org/pdf/1604.02734v1.pdf)
-- [Encryption / Decryption of Data  using PBKDF2 & AES](https://rhamedy.medium.com/encryption-decryption-of-data-based-on-users-password-using-pbkdf2-aes-algorithms-592f8c1bb79a)
-- [Small but powerful - Shortened URLs an Attack Vector](https://cofense.com/small-powerful-shortened-urls-attack-vector/)
-- [The Secrets in URL Shortening Services](https://www.sans.org/blog/the-secrets-in-url-shortening-services/)
+-   [Guess what? URL shorteners short-circuit cloud security](https://arstechnica.com/information-technology/2016/04/guess-what-url-shorteners-short-circuit-cloud-security/)
+-   [Gone in Six Characters: Short URLs Considered Harmful for Cloud services](https://arxiv.org/pdf/1604.02734v1.pdf)
+-   [Encryption / Decryption of Data using PBKDF2 & AES](https://rhamedy.medium.com/encryption-decryption-of-data-based-on-users-password-using-pbkdf2-aes-algorithms-592f8c1bb79a)
+-   [Small but powerful - Shortened URLs an Attack Vector](https://cofense.com/small-powerful-shortened-urls-attack-vector/)
+-   [The Secrets in URL Shortening Services](https://www.sans.org/blog/the-secrets-in-url-shortening-services/)
 
-These were some of they *key* ones (get it) that impacted the reasoning for this project. For even more, type in `short url attacks` into Google and you'll get the idea.
+These were some of they _key_ ones (get it) that impacted the reasoning for this project. For even more, type in `short url attacks` into Google and you'll get the idea.

@@ -7,20 +7,19 @@ import { useState } from 'react';
 import Terms from './components/Terms';
 
 function App() {
+    const [termsToggle, setTermsToggle] = useState(false);
 
-  const [termsToggle, setTermsToggle] = useState(false);
-
-  return (
-    <div className='App grid place-items-center h-fit bg-gray-50 dark:bg-gray-900'>
-      {termsToggle ? <Terms termsToggle={setTermsToggle}/> : null}
-      <Header />
-        <Wrapper>
-          <Squrl />
-          <Decrypter />
-        </Wrapper>
-      <Footer termsToggle={setTermsToggle}/>     
-    </div>
-  );
+    return (
+        <div className="App grid place-items-center h-fit bg-gray-50 dark:bg-gray-900">
+            {termsToggle ? <Terms termsToggle={setTermsToggle} /> : null}
+            <Header />
+            <Wrapper>
+                <Squrl />
+                <Decrypter />
+            </Wrapper>
+            <Footer termsToggle={setTermsToggle} />
+        </div>
+    );
 }
 
 export default App;
