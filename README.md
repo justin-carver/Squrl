@@ -4,6 +4,8 @@ Squrl, Secure Quick URL, is a URL shortening service that offers secure 100%, cl
 
 The goal is to create an application that encrypts all incoming URL data before storing it.
 
+I wrote an article on Medium about the implementation of this project! [Check it out!](https://medium.com/@justin_carver/squrl-an-end-to-end-encrypted-url-shortening-service-ec95b1f43318)
+
 ## Stack
 
 This is currently running a solid _MERN_ stack, utilizing:
